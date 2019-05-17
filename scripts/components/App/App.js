@@ -19,6 +19,10 @@ export class App {
 
     this._initPortfolio();
     this._initTradeWidget();    
+
+    this._el.querySelector('#filter').addEventListener('input', e => {
+      this._table.doFilter(e.target.value);
+    })
   } 
   
   tradeItem(id) {
@@ -55,21 +59,28 @@ export class App {
     })
   }
     
-     _render() {
-        this._el.innerHTML = `
-            <div class="row">
-                <div class="col s12">
-                    <h1>Tiny Crypto Market</h1>
-                </div>
+  _render() {
+    this._el.innerHTML = `
+        <div class="row">
+            <div class="col s12">
+                <h1>Tiny Crypto Market</h1>
             </div>
-            <div class="row portfolio-row">                  
-                <div class="col s6 offset-s6" data-element="portfolio"></div>
+        </div>
+        <div>
+          <form class="col s12">
+            <div class="input-field col s4">
+                <input id="filter" id="amount" type="text" placeholder="Filter">
             </div>
+          </form>
+        </div>
+        <div class="row portfolio-row">
+          <div class="col s6 offset-s6" data-element="portfolio"></div>
+        </div>
 
-            <div class="row">
-              <div data-element="table" class="col s12"></div>
-            </div>
-            <div data-element="trade-widget"></div>
-        `;
-    }
+        <div class="row">
+          <div data-element="table" class="col s12"></div>
+        </div>
+        <div data-element="trade-widget"></div>
+    `;
+  }
 }

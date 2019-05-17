@@ -8,6 +8,10 @@ html, body {
     justify-content: flex-end;
 }
 
+#filter {
+    width: 35%;
+}
+
 .portfolio {
   position: fixed;
   top: 20px;

@@ -5,13 +5,29 @@ export class Table extends BaseComponent {
     super();
     
     this._el = element;
+    this._data = data;
 
-     
-    this._render(data);
+    this._render(this._data);
 
     this._el.addEventListener('click', e => {
       this._onRowClick(e);
     })
+  }
+
+  doFilter(text) {
+    if (text === "") {
+      this._render(this._data);
+      return;
+    }
+
+    text = text.trim().toLowerCase();
+    let filter = this._data.filter(newItem => {
+      const item = newItem.name.toLowerCase();
+      if (item.includes(text)) return true;
+      return false;
+    });
+
+    this._render(filter);
   }
 
   _onRowClick(e) {
@@ -27,30 +43,30 @@ export class Table extends BaseComponent {
     }
   }
     
-     _render(data) {
-        this._el.innerHTML = `
-        <table class="data-table highlight"> 
-          <thead>
-            <tr>
-                <th>Name</th>
-                <th>Symbol</th>
-                <th>Rank</th>
-                <th>Price</th>
+  _render(data) {
+    this._el.innerHTML = `
+    <table class="data-table highlight"> 
+      <thead>
+        <tr>
+            <th>Name</th>
+            <th>Symbol</th>
+            <th>Rank</th>
+            <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${
+          data.map(coin => `
+            <tr data-id="${coin.id}">
+                <td>${coin.name}</td>
+                <td>${coin.symbol}</td>
+                <td>${coin.rank}</td>
+                <td>${coin.price}</td>
             </tr>
-          </thead>
-          <tbody>
-            ${
-              data.map(coin => `
-                <tr data-id="${coin.id}">
-                    <td>${coin.name}</td>
-                    <td>${coin.symbol}</td>
-                    <td>${coin.rank}</td>
-                    <td>${coin.price}</td>
-                </tr>
-              `).join('')
-            }
-          </tbody>
-        </table>
-        `;
-    }
+          `).join('')
+        }
+      </tbody>
+    </table>
+    `;
+  }
 }

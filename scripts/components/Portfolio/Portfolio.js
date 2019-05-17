@@ -35,13 +35,13 @@ export class Portfolio {
             <ul class="collapsible portfolio">
               <li>
                 <p class="collapsible-header">
-                    Current balance: ${this._balance}.
-                    Portfolio Worth: ${this._portfolioWorth}
+                    Current balance: ${this._balance.toFixed(2)}.
+                    Portfolio Worth: ${this._portfolioWorth.toFixed(2)}
                 </p>
                 <div class="collapsible-body">
                 ${
                   items.length === 0
-                    ? ''
+                    ? 'There is nothing yet!'
                     : `
                     <table class="highlight striped"> 
                       <thead>

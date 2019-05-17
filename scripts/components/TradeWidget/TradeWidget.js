@@ -56,7 +56,7 @@ export class TradeWidget extends BaseComponent {
 
   _updateDisplay(value) {
     this._totalEl = this._el.querySelector('#item-total')
-    this._totalEl.textContent = this._currentItem.price * value;
+    this._totalEl.textContent = (this._currentItem.price * value).toFixed(2);
   }
 
   _render(item) {

@@ -62,7 +62,7 @@ export class App {
                     <h1>Tiny Crypto Market</h1>
                 </div>
             </div>
-            <div class="row portfolio-row">
+            <div class="row portfolio-row">                  
                 <div class="col s6 offset-s6" data-element="portfolio"></div>
             </div>
 

@@ -55,7 +55,8 @@ const DataService = {
       const dataWithPrice = data.map(item => {
         let itemUrl = getSingleCoinUrl(item.id);
         let [itemPriceData] = coins.find(coin => coin.url === itemUrl).data;
-        item.price = itemPriceData.close;
+        item.price = itemPriceData.close.toFixed(2);
+        
 
         return item;
       })

@@ -35,17 +35,23 @@ export class TradeWidget extends BaseComponent {
 
       this._el.addEventListener('keydown', e => {
         if (!e.target.closest('#amount')) return;
-
         const { key } = e;
-        if (!isNumeric(key) && key !== 'Backspace') {
+        const value = +e.target.value + +key;
+
+        if (!isNumeric(key) && key !== 'Backspace' && e.target.value.includes('.')) {
           e.preventDefault();
         }
-      })
+
+        if (this._balance - this._currentItem.price * value < 0) {
+          e.preventDefault();
+        }
+      });
   }
 
-  trade(item) {
+  trade(item, balance) {
     this._currentItem = item;
     this._total = 0;
+    this._balance = balance;
 
     this._render(item);
   }
@@ -60,30 +66,30 @@ export class TradeWidget extends BaseComponent {
   }
 
   _render(item) {
-      this._el.innerHTML = `  
-      <div id="modal" class="modal open">
-        <div class="modal-content">
-          <h4>Buying ${item.name}:</h4>
-          <p>
-            Current price: ${item.price}. 
-            Total: <span id="item-total">${this._total}</span>
-          </p>
+    this._el.innerHTML = `  
+    <div id="modal" class="modal open">
+      <div class="modal-content">
+        <h4>Buying ${item.name}:</h4>
+        <p>
+          Current price: ${item.price}. 
+          Total: <span id="item-total">${this._total}</span>
+        </p>
 
-          <div class="row">
-            <form class="col s12">
-                <div class="input-field col s4">
-                    <input id="amount" type="text">
-                    <label for="amount">Amount</label>
-                </div>
-            </form>
-          </div>
+        <div class="row">
+          <form class="col s12">
+              <div class="input-field col s4">
+                  <input id="amount" type="text">
+                  <label for="amount">Amount</label>
+              </div>
+          </form>
+        </div>
 
-          <div class="modal-footer">
-            <a href="#!" data-id="buy" class="modal-close waves-effect waves-teal btn-flat">Buy</a>
-            <a href="#!" data-id="cancel" class="modal-close waves-effect waves-teal btn-flat">Cancel</a>
-          </div>
-      </div>
-      </div>
-      `
+        <div class="modal-footer">
+          <a href="#!" data-id="buy" class="modal-close waves-effect waves-teal btn-flat">Buy</a>
+          <a href="#!" data-id="cancel" class="modal-close waves-effect waves-teal btn-flat">Cancel</a>
+        </div>
+    </div>
+    </div>
+    `
   }
 }

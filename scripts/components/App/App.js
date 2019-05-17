@@ -27,7 +27,7 @@ export class App {
   
   tradeItem(id) {
     const coin = this._data.find(coin => coin.id === id);
-    this._tradeWidget.trade(coin)
+    this._tradeWidget.trade(coin, this._userBalance);
   }
 
   _initPortfolio() {
@@ -45,6 +45,7 @@ export class App {
     this._tradeWidget.on('buy', e => {
       const { item, amount } = e.detail;
       this._portfolio.addItem(item, amount);
+      this._userBalance -= item.price * amount;
     })
   }
 

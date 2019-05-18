@@ -72,17 +72,27 @@ export class Table extends BaseComponent {
       });
     }
     
-    // Вот этот кусок кода мне очень не нравиться.
-    // Помню вы говорили на лекции что это всё можно сделать как-то одной командой...
-    // Спросил в группе - пока никто не ответил или я ещё не успел это исправить
-    // Буду рад если вы мне напомните!
-    while (tbody.firstChild) {
-      tbody.removeChild(tbody.firstChild);
-    }
+    /*
+      До этого я просто удалял весь tbody таблицы и добавлял туда новые элементы
 
-    for (let i = 0; i < childersArr.length; i++) {
-      tbody.append(childersArr[i]);
-    }
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+      }
+      for (let i = 0; i < childersArr.length; i++) {
+        tbody.append(childersArr[i]);
+      }
+    */
+
+    // Сейчас я решил просто перересовать таблицу
+    this._render(childersArr.map(item => {
+      return {
+        id: item.dataset.id,
+        name: item.children[0].textContent,
+        symbol: item.children[1].textContent,
+        rank: item.children[2].textContent,
+        price: item.children[3].textContent
+      }
+    }));
   }
     
   _render(data) {

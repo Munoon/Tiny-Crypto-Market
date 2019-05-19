@@ -32,18 +32,18 @@ export class Table extends BaseComponent {
 
   _onRowClick(e) {
     const target = e.target.closest('tbody tr');
-    if (!target) {
+    
+    if (target) {
+      const id = target.dataset.id;
+      if (id) {
+        let rowClickEvent = new CustomEvent('rowClick', {
+          detail: { id },
+        });
+        this._el.dispatchEvent(rowClickEvent);
+      }
+    } else {
       this._sortTable(e);
-      return;
-    };
-
-    const id = target.dataset.id;
-    if (id) {
-      let rowClickEvent = new CustomEvent('rowClick', {
-        detail: { id },
-      });
-      this._el.dispatchEvent(rowClickEvent);
-    }
+    };    
   }
 
   _sortTable(e) {

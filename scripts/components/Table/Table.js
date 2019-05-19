@@ -71,28 +71,10 @@ export class Table extends BaseComponent {
         if (bNum > aNum) return -1;
       });
     }
-    
-    /*
-      До этого я просто удалял весь tbody таблицы и добавлял туда новые элементы
 
-      while (tbody.firstChild) {
-        tbody.removeChild(tbody.firstChild);
-      }
-      for (let i = 0; i < childersArr.length; i++) {
-        tbody.append(childersArr[i]);
-      }
-    */
-
-    // Сейчас я решил просто перересовать таблицу
-    this._render(childersArr.map(item => {
-      return {
-        id: item.dataset.id,
-        name: item.children[0].textContent,
-        symbol: item.children[1].textContent,
-        rank: item.children[2].textContent,
-        price: item.children[3].textContent
-      }
-    }));
+    childersArr.forEach(item => {
+      tbody.append(item);
+    });
   }
     
   _render(data) {

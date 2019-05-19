@@ -38,7 +38,9 @@ export class TradeWidget extends BaseComponent {
         const { key } = e;
         const value = +e.target.value + +key;
 
-        if (!isNumeric(key) && key !== 'Backspace' && e.target.value.includes('.')) {
+        if (e.target.value.includes('.') && key === '.') {
+          e.preventDefault();
+        } else if (!isNumeric(key) && key !== 'Backspace' && key != '.') {
           e.preventDefault();
         }
 

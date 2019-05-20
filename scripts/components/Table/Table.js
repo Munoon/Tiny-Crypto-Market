@@ -22,8 +22,11 @@ export class Table extends BaseComponent {
 
     text = text.trim().toLowerCase();
     let filter = this._data.filter(newItem => {
-      const item = newItem.name.toLowerCase();
-      if (item.includes(text)) return true;
+      const itemName = newItem.name.toLowerCase();
+      const itemSymbol = newItem.symbol.toLowerCase();
+
+      if (itemName.includes(text)) return true;
+      if (itemSymbol.includes(text)) return true;
       return false;
     });
 

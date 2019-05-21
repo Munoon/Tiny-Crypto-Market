@@ -1,4 +1,5 @@
 import BaseComponent from '../BaseComponent/BaseComponent.js';
+import DataService from '../../services/DataService.js';
 
 export class Table extends BaseComponent {
   constructor({ data, element }) {
@@ -8,6 +9,8 @@ export class Table extends BaseComponent {
     this._data = data;
 
     this._render(this._data);
+    this._sort = 'name';
+    this._filter = '';
 
     this._el.addEventListener('click', e => {
       this._onRowClick(e);
@@ -15,22 +18,10 @@ export class Table extends BaseComponent {
   }
 
   doFilter(text) {
-    if (text === "") {
-      this._render(this._data);
-      return;
-    }
-
-    text = text.trim().toLowerCase();
-    let filter = this._data.filter(newItem => {
-      const itemName = newItem.name.toLowerCase();
-      const itemSymbol = newItem.symbol.toLowerCase();
-
-      if (itemName.includes(text)) return true;
-      if (itemSymbol.includes(text)) return true;
-      return false;
-    });
-
-    this._render(filter);
+    this._filter = text;
+    const arr = DataService.getCurrencies(data => {
+      this._render(data);
+    }, this._filter, this._sort);
   }
 
   _onRowClick(e) {
@@ -45,39 +36,11 @@ export class Table extends BaseComponent {
         this._el.dispatchEvent(rowClickEvent);
       }
     } else {
-      this._sortTable(e);
+      this._sort = e.target.dataset.sort;
+      const arr = DataService.getCurrencies(data => {
+        this._render(data);
+      }, this._filter, this._sort);
     };    
-  }
-
-  _sortTable(e) {
-    const type = e.target.dataset.type;
-    const index = e.target.cellIndex;
-    const tbody = this._el.querySelector('tbody');
-    const childers = tbody.querySelectorAll('tr');
-    let childersArr = Array.from(childers);
-
-    if (type === 'string') {
-      childersArr.sort((a, b) => {
-        let aWord = a.children[index].textContent.toLowerCase();
-        let bWord = b.children[index].textContent.toLowerCase();
-
-        if (aWord > bWord) return 1;
-        if (bWord > aWord) return -1;
-      });
-    } 
-    if (type === 'number') {
-      childersArr.sort((a, b) => {
-        let aNum = +a.children[index].textContent;
-        let bNum = +b.children[index].textContent;
-
-        if (aNum > bNum) return 1;
-        if (bNum > aNum) return -1;
-      });
-    }
-
-    childersArr.forEach(item => {
-      tbody.append(item);
-    });
   }
     
   _render(data) {
@@ -85,10 +48,10 @@ export class Table extends BaseComponent {
     <table class="data-table highlight"> 
       <thead>
         <tr>
-          <th data-type="string">Name</th>
-          <th data-type="string">Symbol</th>
-          <th data-type="number">Rank</th>
-          <th data-type="number">Price</th>
+          <th data-sort="name">Name</th>
+          <th data-sort="symbol">Symbol</th>
+          <th data-sort="rank">Rank</th>
+          <th data-sort="price">Price</th>
         </tr>
       </thead>
       <tbody>

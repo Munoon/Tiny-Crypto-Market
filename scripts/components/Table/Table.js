@@ -22,8 +22,11 @@ export class Table extends BaseComponent {
 
     text = text.trim().toLowerCase();
     let filter = this._data.filter(newItem => {
-      const item = newItem.name.toLowerCase();
-      if (item.includes(text)) return true;
+      const itemName = newItem.name.toLowerCase();
+      const itemSymbol = newItem.symbol.toLowerCase();
+
+      if (itemName.includes(text)) return true;
+      if (itemSymbol.includes(text)) return true;
       return false;
     });
 
@@ -32,18 +35,18 @@ export class Table extends BaseComponent {
 
   _onRowClick(e) {
     const target = e.target.closest('tbody tr');
-    if (!target) {
+    
+    if (target) {
+      const id = target.dataset.id;
+      if (id) {
+        let rowClickEvent = new CustomEvent('rowClick', {
+          detail: { id },
+        });
+        this._el.dispatchEvent(rowClickEvent);
+      }
+    } else {
       this._sortTable(e);
-      return;
-    };
-
-    const id = target.dataset.id;
-    if (id) {
-      let rowClickEvent = new CustomEvent('rowClick', {
-        detail: { id },
-      });
-      this._el.dispatchEvent(rowClickEvent);
-    }
+    };    
   }
 
   _sortTable(e) {
@@ -71,28 +74,10 @@ export class Table extends BaseComponent {
         if (bNum > aNum) return -1;
       });
     }
-    
-    /*
-      До этого я просто удалял весь tbody таблицы и добавлял туда новые элементы
 
-      while (tbody.firstChild) {
-        tbody.removeChild(tbody.firstChild);
-      }
-      for (let i = 0; i < childersArr.length; i++) {
-        tbody.append(childersArr[i]);
-      }
-    */
-
-    // Сейчас я решил просто перересовать таблицу
-    this._render(childersArr.map(item => {
-      return {
-        id: item.dataset.id,
-        name: item.children[0].textContent,
-        symbol: item.children[1].textContent,
-        rank: item.children[2].textContent,
-        price: item.children[3].textContent
-      }
-    }));
+    childersArr.forEach(item => {
+      tbody.append(item);
+    });
   }
     
   _render(data) {

@@ -4,29 +4,31 @@ const getSingleCoinUrl = id => `https://api.coinpaprika.com/v1/coins/${id}/ohlcv
 
 const DataService = {
   getCurrencies(callback) {
-    fetch(COINS_URL)
+    DataService._sendRequest(COINS_URL)
       .then(response => {
-        return response.json();
-      })
-      .then(getData => {
-        const data = getData.slice(0, 10);
-        let lengh = data.length;
+        const data = response.slice(0, 10);
+        let urls = data.reduce((acc, item) => {
+          const url = getSingleCoinUrl(item.id);
+          acc.push(url)
+          return acc;
+        }, []);
 
-        data.forEach(element => {
-          const url = getSingleCoinUrl(element.id);
-          fetch(url).then(resp => resp.json())
-            .then(getData => {
-              element.price = +getData[0].open.toFixed(2);
-              lengh--;
-
-              if (!lengh) {
-                callback(data);
-              }
-            });
-        });
+        Promise.all(urls.map(url => DataService._sendRequest(url, true)))
+          .then(response => {
+            response.forEach((element, index) => {
+              data[index].price = element.close;
+            })
+          })
+          .then(() => callback(data));
       })
-      .catch(exception => {
-        alert(exception);
+  },
+
+  _sendRequest(url, firstElement = false) {
+    return fetch(url)
+      .then(response => response.json())
+      .then(response => {
+        if (firstElement) return response[0];
+        else return response; 
       });
   }
 }

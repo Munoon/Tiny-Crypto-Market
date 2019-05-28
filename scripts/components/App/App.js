@@ -1,8 +1,6 @@
 import { Table } from '../Table/Table.js';
 import { Portfolio } from '../Portfolio/Portfolio.js';
 import { TradeWidget } from '../TradeWidget/TradeWidget.js';
-
-
 import DataService from '../../services/DataService.js';
 
 export class App {
